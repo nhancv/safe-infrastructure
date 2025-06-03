@@ -1,6 +1,7 @@
 volumes:
   nginx-shared-txs:
   nginx-shared-cfg:
+  nginx-shared-media:
 
 x-healthcheck-db-template: &pghealthcheck
   healthcheck:
@@ -33,11 +34,13 @@ services:
       - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - nginx-shared-txs:/nginx-txs
       - nginx-shared-cfg:/nginx-cfg
+      - nginx-shared-media:/cfg-media
     depends_on:
       - txs-web
       - cfg-web
       - cgw-web
       - events-web
+      - ui
 
   txs-db:
     image: postgres:14-alpine
@@ -143,6 +146,7 @@ services:
     tty: true
     volumes:
       - nginx-shared-cfg:/nginx
+      - nginx-shared-media:/app/src/media
     env_file:
       - container_env_files/cfg.env
     depends_on:
@@ -168,10 +172,14 @@ services:
     image: safeglobal/safe-wallet-web:${UI_VERSION}
     env_file:
       - container_env_files/ui.env
-    depends_on:
-      - nginx
+#    depends_on:
+#      - nginx
     expose:
       - 8080
+    environment:
+      - NODE_OPTIONS=--max-old-space-size=6144
+      - NEXT_TELEMETRY_DISABLED=1
+      - NODE_ENV=production
 
   general-rabbitmq:
     image: rabbitmq:alpine

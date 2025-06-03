@@ -16,6 +16,10 @@ These values are meant to be provided in the admin panel `http://localhost:8000/
 
 They must match the ones in the [Safe SDK repo](https://github.com/safe-global/safe-core-sdk/blob/main/packages/protocol-kit/src/utils/eip-3770/config.ts).
 
+## RPC URIs
+
+For test, just put the `Rpc authentication = No Authentication` and `Rpc uri` = `Safe apps rpc uri` = `Public rpc uri`
+
 ## Connecting the Safe Client Gateway (CGW) to the Safe Transaction Service (TXS)
 
 The CGW can forward requests to many independently running TXS instances pointing to different chains. The CFG has to keep a registry of every available instance of the TXS.

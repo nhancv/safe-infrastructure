@@ -23,7 +23,13 @@ Then edit your `.env` and set `RPC_NODE_URL` to the chain you want the services 
 
 By default, last stable version will be used for every service.
 
-**Important Note:** Only L2 Safes are supported in the setup provided. Change this at your own risk.
+**Important Note:** 
+- Only L2 Safes are supported in the setup provided. Change this at your own risk.
+- Check Docker Resources settings in your Docker Desktop app:
+  + CPU limit: 8
+  + Memory limit: 14 GB
+  + Swap: 4 GB
+  + Disk usage limit: 100 GB
 
 ## Step 2: Setup Django superusers
 
@@ -78,7 +84,9 @@ Remember to edit your `ChainInfo` json fields `transaction_service_uri` and `vpc
 
 By default, tx service will auto setup `MasterCopies` and `Proxy Factories` for
 [a of networks](https://github.com/safe-global/safe-eth-py/blob/main/gnosis/safe/addresses.py).
-If your network is not supported you have to add the addresses manually in http://localhost:8000/txs/admin/
+If your network is not supported, you have to add the addresses manually in http://localhost:8000/txs/admin/ -> `Safe Transaction Service`:
+- MasterCopies = Safe master copies -> Add SAFE_SINGLETON (The singleton contract is also known as the master copy of the Safe)
+- ProxyFactories: Proxy factories -> Add SAFE_PROXY_FACTORY
 
 ## Step 5: Add your webhooks
 
@@ -89,10 +97,10 @@ Our services invalidate the caches of the client gateway using webhooks. Both th
 # Inside the file "container_env_files/cfg.env"
 #...
 CGW_URL=http://nginx:8000/cgw
-CGW_AUTH_TOKEN=some_random_token
+CGW_AUTH_TOKEN=your_privileged_endpoints_token
 
 # Inside the file "container_env_files/cgw.env"
-AUTH_TOKEN=some_random_token
+AUTH_TOKEN=your_privileged_endpoints_token
 ```
 
 `AUTH_TOKEN` and `CGW_AUTH_TOKEN` must be the same.
