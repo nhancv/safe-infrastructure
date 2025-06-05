@@ -1,0 +1,13 @@
+services:
+  ui-build:
+    image: safeglobal/safe-wallet-web:${UI_VERSION}
+    env_file:
+      - container_env_files/ui.env
+    volumes:
+      - ./build/ui-build/out:/app/out
+    command: >
+      sh -c "yarn build && cp -r /app/apps/web/out/* /app/out/"
+    environment:
+      - NODE_OPTIONS=--max-old-space-size=6144
+  
+# docker compose -f docker-compose.ui-build.yml up --build

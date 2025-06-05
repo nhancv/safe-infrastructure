@@ -39,7 +39,12 @@ We provide a script to automate this second step, if you want to use it, simply 
 
 ```
 cd scripts
+
+# To build all services include the UI
 sh run_locally.sh
+
+# If you just need a UI version 1.61.0
+sh run_locally_v1.61.0.sh
 ```
 
 ### Option #2 - Manual way
@@ -51,6 +56,8 @@ docker compose pull
 docker compose down -v
 docker compose up
 ```
+
+- Note: If you need to build the UI first, then run `docker compose -f docker-compose.ui-build.yml up --build`. And use the `docker compose -f docker-compose.ui.yml up -d --remove-orphans` instead of the default one.
 
 You will need to identify the ID or name of the containers using `docker ps`. To create the default super user for the Safe Config Service, we run the following command:
 

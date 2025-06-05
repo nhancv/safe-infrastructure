@@ -169,15 +169,14 @@ services:
         condition: service_healthy
 
   ui:
-    image: safeglobal/safe-wallet-web:${UI_VERSION}
-    env_file:
-      - container_env_files/ui.env
+    image: node:18-alpine
+    working_dir: /app
+    volumes:
+      - ./build/ui-build/out:/app/out
     expose:
       - 8080
-    environment:
-      - NODE_OPTIONS=--max-old-space-size=6144
-      - NEXT_TELEMETRY_DISABLED=1
-      - NODE_ENV=production
+    command: >
+      sh -c "npx -y serve ./out -p 8080"
 
   general-rabbitmq:
     image: rabbitmq:alpine
@@ -197,3 +196,5 @@ services:
         condition: service_healthy
       general-rabbitmq:
         condition: service_healthy
+
+# docker compose -f docker-compose.ui.yml up -d
